@@ -1,31 +1,25 @@
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
+# Solace PubSub+ Mission Control Plugin for IntelliJ IDEA
 
-# Project Title
+![Build](https://github.com/SolaceLabs/solace-mc-intellij-plugin/workflows/Build/badge.svg)
+[![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 
-## Overview
-This project is ...
+<!-- Plugin description -->
+Leverage the power of [Solace's Mission Control](https://solace.com/products/event-broker/cloud/mission-control/) right from IntelliJ.
+<!-- Plugin description end -->
 
-## Getting started quickly
-1. Step 1
-1. Step 2
-1. Step 3
+![Plugin Demo](doc/plugin_demo.gif)
 
-## Documentation
-Details about the what why and how of this project. Either refer to external documentations or document in this repo
+## Features
+* Create event broker services
+* Delete event broker services
+* View event broker services
+* Publish and subscribe to an event broker service
 
-## Resources
-This is not an officially supported Solace product.
-
-For more information try these resources:
-- Ask the [Solace Community](https://solace.community)
-- The Solace Developer Portal website at: https://solace.dev
-
-
-## Contributing
-Contributions are encouraged! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Authors
-See the list of [contributors](https://github.com/solacecommunity/<github-repo>/graphs/contributors) who participated in this project.
-
-## License
-See the [LICENSE](LICENSE) file for details.
+## Usage
+* Create a [Solace Cloud API token](https://docs.solace.com/Cloud/ght_api_tokens.htm?Highlight=api%20tokens#Create) with the following permissions (either the "My Services" or "Organizational Services" variants):
+  * Get Services
+  * (Optional) Create Services
+  * (Optional) Delete Services
+* Enter the API token in the plugin settings: `Settings/Preferences`>`Tools`>`Solace Mission Control` ![Tool Preferences](doc/tool_settings.png)
+* (Optional) If you use SSO, specify the URL you use to access Solace Cloud

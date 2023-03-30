@@ -1,0 +1,1988 @@
+{
+    "components": {
+        "schemas": {
+            "Broker": {
+                "description": "Broker Details available on expand only.",
+                "properties": {
+                    "clientCertificateAuthorities": {
+                        "description": "The list of client certificate authorities.",
+                        "items": {
+                            "$ref": "#/components/schemas/CertificateAuthority"
+                        },
+                        "type": "array"
+                    },
+                    "cluster": {
+                        "$ref": "#/components/schemas/Cluster"
+                    },
+                    "configSyncSslEnabled": {
+                        "description": "Whether Config-Sync SSL is enabled.",
+                        "type": "boolean"
+                    },
+                    "diskSize": {
+                        "description": "The disk size for the message spool, in gigabytes (GB).",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "domainCertificateAuthorities": {
+                        "description": "The list of domain certificate authorities.",
+                        "items": {
+                            "$ref": "#/components/schemas/CertificateAuthority"
+                        },
+                        "type": "array"
+                    },
+                    "ldapProfiles": {
+                        "description": "The LDAP profiles configured for the event broker service.",
+                        "items": {
+                            "$ref": "#/components/schemas/LdapProfile"
+                        },
+                        "type": "array"
+                    },
+                    "managementReadOnlyLoginCredential": {
+                        "$ref": "#/components/schemas/ManagementLoginCredential"
+                    },
+                    "maxSpoolUsage": {
+                        "description": "The maximum message spool usage allowed on the event broker service, in gigabytes (GB).",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "monitoringMode": {
+                        "description": "The monitoring mode. This can be 'basic' or 'advanced'. The value of basic is default monitoring and advanced means that monitoring of the event broker is enabled.",
+                        "type": "string"
+                    },
+                    "msgVpns": {
+                        "description": "The list of Message VPNs configured on the event broker service.",
+                        "items": {
+                            "$ref": "#/components/schemas/MsgVpn"
+                        },
+                        "type": "array"
+                    },
+                    "redundancyGroupSslEnabled": {
+                        "description": "Whether redundancy group SSL is enabled. This is mate-link encryption.",
+                        "type": "boolean"
+                    },
+                    "servicePackageId": {
+                        "description": "The service package identifier of the event broker version.",
+                        "type": "string"
+                    },
+                    "tlsStandardDomainCertificateAuthoritiesEnabled": {
+                        "description": "Whether TLS Standard Domain Certificate Authorities is enabled.",
+                        "type": "boolean"
+                    },
+                    "version": {
+                        "description": "The version number for the event broker service.",
+                        "example": "10.1.1.29",
+                        "type": "string"
+                    },
+                    "versionFamily": {
+                        "description": "Version Family, a truncated form of the version.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CertificateAuthority": {
+                "description": "The certificate authority.",
+                "properties": {
+                    "name": {
+                        "description": "Name",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ClientProfile": {
+                "description": "The client profile configured on the event broker service.",
+                "properties": {
+                    "name": {
+                        "maxLength": 32,
+                        "minLength": 1,
+                        "pattern": "[a-zA-Z0-9-_]*",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name"
+                ],
+                "type": "object"
+            },
+            "Cluster": {
+                "description": "The DMR cluster details.",
+                "properties": {
+                    "backupRouterName": {
+                        "description": "The name of the backup event broker.",
+                        "type": "string"
+                    },
+                    "monitoringRouterName": {
+                        "description": "The name of the monitoring node.",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The name of the DMR cluster.",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "The password for the cluster.",
+                        "format": "password",
+                        "type": "string"
+                    },
+                    "primaryRouterName": {
+                        "description": "The name of the primary event broker.",
+                        "type": "string"
+                    },
+                    "remoteAddress": {
+                        "description": "The address of the remote node in the cluster.",
+                        "type": "string"
+                    },
+                    "supportedAuthenticationMode": {
+                        "description": "The authentication mode between the nodes in the DMR cluster.",
+                        "items": {
+                            "description": "The authentication mode between the nodes in the DMR cluster.",
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object"
+            },
+            "ConnectionEndpoint": {
+                "description": "The connection endpoint.",
+                "properties": {
+                    "accessType": {
+                        "description": "The connectivity for the connection endpoint. This can be through private IP addresses (Private) or public Internet (Public).",
+                        "pattern": "^Public$|^Private$",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The description for the connection endpoint.",
+                        "type": "string"
+                    },
+                    "hostNames": {
+                        "description": "The hostnames assigned to the connection endpoint.",
+                        "items": {
+                            "description": "The hostnames assigned to the connection endpoint.",
+                            "readOnly": true,
+                            "type": "string"
+                        },
+                        "readOnly": true,
+                        "type": "array"
+                    },
+                    "id": {
+                        "description": "The identifier of the connection endpoint.",
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "k8sServiceId": {
+                        "description": "The identifier for the Kubernetes service.",
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "k8sServiceType": {
+                        "description": "The connectivity configuration that is used in the Kubernetes cluster.",
+                        "pattern": "^NodePort$|^LoadBalancer$|^ClusterIP$",
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The name of the connection endpoint.",
+                        "example": "Public Endpoint",
+                        "type": "string"
+                    },
+                    "ports": {
+                        "additionalProperties": {
+                            "description": "The names and port numbers for the connection endpoint.",
+                            "format": "int32",
+                            "type": "integer"
+                        },
+                        "description": "The names and port numbers for the connection endpoint.",
+                        "type": "object"
+                    },
+                    "type": {
+                        "description": "The type of object for informational purposes.",
+                        "readOnly": true,
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CreateServiceRequest": {
+                "properties": {
+                    "clusterName": {
+                        "description": "The name of the DMR cluster.",
+                        "example": "MyCluster",
+                        "type": "string"
+                    },
+                    "datacenterId": {
+                        "description": "The identifier of the datacenter.",
+                        "example": "k8s-us-east-1",
+                        "type": "string"
+                    },
+                    "eventBrokerVersion": {
+                        "description": "The event broker version. A default version is provided when this is not specified.",
+                        "example": "10.1",
+                        "pattern": "^([0-9]+)\\.([0-9]+)$",
+                        "type": "string"
+                    },
+                    "locked": {
+                        "default": false,
+                        "description": "Lock service after creation. A locked service cannot be deleted.",
+                        "example": true,
+                        "type": "boolean"
+                    },
+                    "maxSpoolUsage": {
+                        "description": "The message spool size, in gigabytes (GB). A default message spool size is provided if this is not specified.",
+                        "example": 50,
+                        "format": "int32",
+                        "maximum": 6000,
+                        "minimum": 10,
+                        "type": "integer"
+                    },
+                    "msgVpnName": {
+                        "description": "The message VPN name. A default message VPN name is provided when this is not specified.",
+                        "example": "MyVPN",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The event broker service name.",
+                        "example": "my-service-name",
+                        "type": "string"
+                    },
+                    "serviceClassId": {
+                        "description": "The identifier of the service class.",
+                        "example": "developer",
+                        "type": "string"
+                    },
+                    "serviceConnectionEndpoints": {
+                        "description": "The collection of service connection endpoints.",
+                        "items": {
+                            "$ref": "#/components/schemas/ConnectionEndpoint"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "datacenterId",
+                    "name",
+                    "serviceClassId"
+                ],
+                "type": "object"
+            },
+            "Error": {
+                "properties": {
+                    "errorId": {
+                        "description": "A universally unique identifier (UUID) is useful for debugging. You can provide this code as part of the information you send to our support team.",
+                        "type": "string"
+                    },
+                    "message": {
+                        "description": "A user-friendly message describing the reason for the error or what went wrong.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ErrorResponse": {
+                "discriminator": {
+                    "propertyName": "errorType"
+                },
+                "properties": {
+                    "errorId": {
+                        "description": "The UUID (Universally Unique Identifier) that is logged with an appropriate stack trace for a WARN or ERROR log that allows support to better determine what cause the error.",
+                        "example": "123e4567-e89b-12d3-a456-426655440000",
+                        "type": "string"
+                    },
+                    "errorType": {
+                        "type": "string",
+                        "writeOnly": true
+                    },
+                    "message": {
+                        "description": "A user-friendly message that describes the error.",
+                        "example": "An error occurred.",
+                        "type": "string"
+                    },
+                    "meta": {
+                        "additionalProperties": {
+                            "example": "'object': { 'field': 'description' }",
+                            "type": "object"
+                        },
+                        "example": "'object': { 'field': 'description' }",
+                        "type": "object"
+                    },
+                    "validationDetails": {
+                        "additionalProperties": {
+                            "description": "When applicable, these are the details of issues with the fields provided for the REST call.",
+                            "example": "'name': ['Not unique']",
+                            "items": {
+                                "description": "When applicable, these are the details of issues with the fields provided for the REST call.",
+                                "example": "'name': ['Not unique']",
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        "description": "When applicable, these are the details of issues with the fields provided for the REST call.",
+                        "example": "'name': ['Not unique']",
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "GetAllServicesResponse": {
+                "properties": {
+                    "data": {
+                        "items": {
+                            "$ref": "#/components/schemas/GetServices"
+                        },
+                        "type": "array"
+                    },
+                    "meta": {
+                        "additionalProperties": {
+                            "type": "object"
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "GetService": {
+                "properties": {
+                    "adminState": {
+                        "description": "The administration state of the event broker service, which can be 'initial', 'start', 'stop' , or 'destroy'.",
+                        "type": "string"
+                    },
+                    "broker": {
+                        "$ref": "#/components/schemas/Broker"
+                    },
+                    "createdBy": {
+                        "description": "The unique identifier representing the user who created the event broker service.",
+                        "type": "string"
+                    },
+                    "createdTime": {
+                        "description": "The time the event broker service was created, in ISO 8601 date/time format.",
+                        "example": "2022-03-14T15:01:34Z",
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "creationState": {
+                        "description": "The creation state of the event broker service, one of 'pending', 'inProgress' , ' completed' , or 'failed'.",
+                        "type": "string"
+                    },
+                    "datacenterId": {
+                        "description": "The identifier of the datacenter.",
+                        "type": "string"
+                    },
+                    "defaultManagementHostname": {
+                        "description": "Default management hostname.",
+                        "type": "string"
+                    },
+                    "eventMeshId": {
+                        "description": "The identifier of the event mesh for which the event broker service belongs, if applicable.",
+                        "type": "string"
+                    },
+                    "id": {
+                        "description": "The identifier of the event broker service.",
+                        "type": "string"
+                    },
+                    "infrastructureId": {
+                        "description": "A unique identifier representing for the infrastructure of the event broker service.",
+                        "type": "string"
+                    },
+                    "locked": {
+                        "description": "Whether the event broker service is locked. Locked event broker services cannot be deleted.",
+                        "type": "boolean"
+                    },
+                    "name": {
+                        "description": "The name of the event broker service.",
+                        "type": "string"
+                    },
+                    "ongoingOperationIds": {
+                        "description": "The operation identifiers for an ongoing operation on the event broker service.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "ownedBy": {
+                        "description": "The unique identifier representing the user who owns the event broker service.",
+                        "type": "string"
+                    },
+                    "serviceClassId": {
+                        "description": "The service class of the event broker service.",
+                        "type": "string"
+                    },
+                    "serviceConnectionEndpoints": {
+                        "description": "Connection Endpoints available on expand only.",
+                        "items": {
+                            "$ref": "#/components/schemas/ConnectionEndpoint"
+                        },
+                        "type": "array"
+                    },
+                    "type": {
+                        "description": "The type of object for informational purposes.",
+                        "type": "string"
+                    },
+                    "updatedBy": {
+                        "description": "The unique identifier representing the user who last updated the event broker service.",
+                        "type": "string"
+                    },
+                    "updatedTime": {
+                        "description": "The time of the last update was performed on the event broker service, in ISO 8601 date/time format.",
+                        "example": "2022-03-14T15:01:34Z",
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "GetServiceResponse": {
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/GetService"
+                    },
+                    "meta": {
+                        "additionalProperties": {
+                            "type": "object"
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "GetServices": {
+                "properties": {
+                    "adminState": {
+                        "description": "The administration state of the event broker service, which can be 'initial', 'start', 'stop' , or 'destroy'.",
+                        "type": "string"
+                    },
+                    "createdBy": {
+                        "description": "The unique identifier representing the user who created the event broker service.",
+                        "type": "string"
+                    },
+                    "createdTime": {
+                        "description": "The time the event broker service was created, in ISO 8601 date/time format.",
+                        "example": "2022-03-14T15:01:34Z",
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "creationState": {
+                        "description": "The creation state of the event broker service, one of 'pending', 'inProgress' , ' completed' , or 'failed'.",
+                        "type": "string"
+                    },
+                    "datacenterId": {
+                        "description": "The identifier of the datacenter.",
+                        "type": "string"
+                    },
+                    "eventMeshId": {
+                        "description": "The identifier of the event mesh for which the event broker service belongs, if applicable.",
+                        "type": "string"
+                    },
+                    "id": {
+                        "description": "The identifier of the event broker service.",
+                        "type": "string"
+                    },
+                    "infrastructureId": {
+                        "description": "A unique identifier representing for the infrastructure of the event broker service.",
+                        "type": "string"
+                    },
+                    "locked": {
+                        "description": "Whether the event broker service is locked. Locked event broker services cannot be deleted.",
+                        "type": "boolean"
+                    },
+                    "name": {
+                        "description": "The name of the event broker service.",
+                        "type": "string"
+                    },
+                    "ongoingOperationIds": {
+                        "description": "The operation identifiers for an ongoing operation on the event broker service.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "ownedBy": {
+                        "description": "The unique identifier representing the user who owns the event broker service.",
+                        "type": "string"
+                    },
+                    "serviceClassId": {
+                        "description": "The service class of the event broker service.",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "The type of object for informational purposes.",
+                        "type": "string"
+                    },
+                    "updatedBy": {
+                        "description": "The unique identifier representing the user who last updated the event broker service.",
+                        "type": "string"
+                    },
+                    "updatedTime": {
+                        "description": "The time of the last update was performed on the event broker service, in ISO 8601 date/time format.",
+                        "example": "2022-03-14T15:01:34Z",
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "LdapProfile": {
+                "description": "The LDAP profiles configured for the event broker service.",
+                "properties": {
+                    "name": {
+                        "description": "The name of the LDAP profile.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginCredential": {
+                "description": "The login credentials for the event broker service.",
+                "properties": {
+                    "password": {
+                        "description": "The password to log into the event broker service.",
+                        "format": "password",
+                        "type": "string"
+                    },
+                    "username": {
+                        "description": "The username to log into the event broker service.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ManagementLoginCredential": {
+                "description": "The management admin login credentials",
+                "properties": {
+                    "password": {
+                        "description": "The password to log into the event broker service.",
+                        "format": "password",
+                        "type": "string"
+                    },
+                    "token": {
+                        "description": "The token for management access.",
+                        "example": "YWJj.eyJhY2Nlc3NfdG9rZW4iOiAjJzN28wZm04In0%3D.eHl6",
+                        "type": "string"
+                    },
+                    "username": {
+                        "description": "The username to log into the event broker service.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "MsgVpn": {
+                "description": "The list of Message VPNs configured on the event broker service.",
+                "properties": {
+                    "authenticationBasicEnabled": {
+                        "description": "Whether basic authentication is enabled.",
+                        "type": "boolean"
+                    },
+                    "authenticationBasicType": {
+                        "description": "The authentication type. This can be 'none', 'internal', or 'ldap'.",
+                        "type": "string"
+                    },
+                    "authenticationClientCertEnabled": {
+                        "description": "Whether client certificate authentication is enabled.",
+                        "type": "boolean"
+                    },
+                    "authenticationClientCertValidateDateEnabled": {
+                        "description": "Whether the validation of the 'Not Before' and 'Not After' dates in a client certificate is enabled.",
+                        "type": "boolean"
+                    },
+                    "authenticationOauthEnabled": {
+                        "description": "Whether OAuth authentication is enabled for the Message VPN.",
+                        "type": "boolean"
+                    },
+                    "clientProfiles": {
+                        "description": "The client profiles configured on the Message VPN.",
+                        "items": {
+                            "$ref": "#/components/schemas/ClientProfile"
+                        },
+                        "type": "array"
+                    },
+                    "enabled": {
+                        "description": "Enabled",
+                        "type": "boolean"
+                    },
+                    "eventLargeMsgThreshold": {
+                        "description": "The large message threshold generates events when the size of a message in a Message VPN exceeds a specified size.",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "managementAdminLoginCredential": {
+                        "$ref": "#/components/schemas/ManagementLoginCredential"
+                    },
+                    "maxConnectionCount": {
+                        "description": "The maximum number of clients that are permitted to simultaneously connect to the Message VPN.\n",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "maxEgressFlowCount": {
+                        "description": "The maximum number of egress flows (that is, Guaranteed message client receive flows or consumer flows) that can be created by a single client.",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "maxEndpointCount": {
+                        "description": "The maximum number of flows that can bind to a non-exclusive durable topic endpoint.",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "maxIngressFlowCount": {
+                        "description": "The total permitted number of ingress flows (that is, Guaranteed Message client publish flows) for a Message VPN.",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "maxMsgSpoolUsage": {
+                        "description": "The maximum message spool usage.",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "maxSubscriptionCount": {
+                        "description": "The maximum number of unique subscriptions.",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "maxTransactedSessionCount": {
+                        "description": "The maximum number of simultaneous transacted sessions and/or XA Sessions allowed for the given Message VPN.",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "maxTransactionCount": {
+                        "description": "The total number of simultaneous transactions (both local transactions and transactions within distributed/XA transaction branches) in a Message VPN.",
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "msgVpnName": {
+                        "description": "The name of the Message VPN.",
+                        "type": "string"
+                    },
+                    "sempOverMessageBus": {
+                        "$ref": "#/components/schemas/SEMPOverMsgBus"
+                    },
+                    "serviceLoginCredential": {
+                        "$ref": "#/components/schemas/LoginCredential"
+                    },
+                    "subDomainName": {
+                        "description": "The generated hostname assigned for the Message VPN.  For example, 'mr54hcalmefac.messaging.solace.cloud'.",
+                        "type": "string"
+                    },
+                    "truststoreUri": {
+                        "description": "The URI for the SSL trust store.",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Operation": {
+                "properties": {
+                    "completedTime": {
+                        "description": "The completion time, whether it was successful or failed, in ISO 8601 date/time format.",
+                        "example": "2022-03-14T15:01:34.000Z",
+                        "type": "string"
+                    },
+                    "createdBy": {
+                        "description": "The unique identifier representing the user who created the operation.",
+                        "type": "string"
+                    },
+                    "createdTime": {
+                        "description": "The time the operation was created, in ISO 8601 date/time format.",
+                        "example": "2022-03-14T15:01:34.000Z",
+                        "type": "string"
+                    },
+                    "error": {
+                        "$ref": "#/components/schemas/Error"
+                    },
+                    "id": {
+                        "description": "The unique identifier for the operation.",
+                        "type": "string"
+                    },
+                    "operationType": {
+                        "description": "The type of operation against the resource, such as 'create_service', 'delete_service', 'scale_up_infrastructure', 'scale_down_infrastructure', 'delete_infrastructure', 'service_request', and 'infrastructure_request'.",
+                        "type": "string"
+                    },
+                    "resourceId": {
+                        "description": "The resource ID that the operation belongs to.",
+                        "example": "abcd1234",
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "resourceType": {
+                        "description": "The resource type that the operation belongs to.",
+                        "example": "service",
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "The status of the operation.",
+                        "enum": [
+                            "pending",
+                            "inProgress",
+                            "completed",
+                            "failed"
+                        ],
+                        "example": "pending",
+                        "readOnly": true,
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "The type of object for informational purposes.",
+                        "example": "operation",
+                        "readOnly": true,
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "OperationResponse": {
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/Operation"
+                    },
+                    "meta": {
+                        "additionalProperties": {
+                            "type": "object"
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "SEMPOverMsgBus": {
+                "description": "Whether SEMP-Over-Message-Bus attributes is enabled.",
+                "properties": {
+                    "sempAccessToAdminCmdsEnabled": {
+                        "description": "Whether access to SEMP commands with the admin user access-level is enabled.",
+                        "type": "boolean"
+                    },
+                    "sempAccessToCacheCmdsEnabled": {
+                        "description": "SEMP Access to Cache Commands Enabled",
+                        "type": "boolean"
+                    },
+                    "sempAccessToClientAdminCmdsEnabled": {
+                        "description": "Whether access to SEMP Client-Admin commands is enabled.",
+                        "type": "boolean"
+                    },
+                    "sempAccessToShowCmdsEnabled": {
+                        "description": "Whether access to show SEMP commands is enabled.",
+                        "type": "boolean"
+                    },
+                    "sempOverMsgBusEnabled": {
+                        "description": "Whether SEMP over Message Bus is enabled.  When enabled for a Message VPN, clients have access to a limited subset of the event broker management commands.",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateServiceRequest": {
+                "properties": {
+                    "locked": {
+                        "description": "Lock (true) and unlock (false) the event broker service. If an event broker service is locked it's protected from being deleted.",
+                        "example": true,
+                        "type": "boolean"
+                    },
+                    "name": {
+                        "description": "The new service name. The new service name must be unique within an organization.",
+                        "example": "My-First-Service",
+                        "maxLength": 50,
+                        "type": "string"
+                    },
+                    "ownedBy": {
+                        "description": "The owner of the event broker service. The owner must belong to the same organization.",
+                        "example": "xjllt9rg",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "bearerFormat": "JWT",
+                "scheme": "bearer",
+                "type": "http"
+            }
+        }
+    },
+    "info": {
+        "description": "Documentation for Mission Control API",
+        "title": "MISSION CONTROL",
+        "version": "V2"
+    },
+    "openapi": "3.0.1",
+    "paths": {
+        "/api/v2/missionControl/eventBrokerServices": {
+            "get": {
+                "description": "Get a listing of event broker services.",
+                "operationId": "getServices",
+                "parameters": [
+                    {
+                        "description": "The page number to retrieve.",
+                        "in": "query",
+                        "name": "pageNumber",
+                        "required": false,
+                        "schema": {
+                            "default": 1,
+                            "minimum": 1,
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "The number of event brokers to return per page.",
+                        "in": "query",
+                        "name": "pageSize",
+                        "required": false,
+                        "schema": {
+                            "default": 100,
+                            "maximum": 100,
+                            "minimum": 1,
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": [
+                                        {
+                                            "adminState": "start",
+                                            "createdTime": "2023-01-10T14:40:18.000Z",
+                                            "creationState": "completed",
+                                            "datacenterId": "gke-gcp-us-central1-a",
+                                            "id": "0p0ekrdene3",
+                                            "infrastructureId": "o6ggjgs9jd8",
+                                            "locked": false,
+                                            "name": "My-First-Service",
+                                            "ownedBy": "voufg5j0ic9",
+                                            "serviceClassId": "developer",
+                                            "type": "service"
+                                        }
+                                    ],
+                                    "meta": {
+                                        "pagination": {
+                                            "count": 1,
+                                            "nextPage": null,
+                                            "pageNumber": 1,
+                                            "pageSize": 100,
+                                            "totalPages": 1
+                                        }
+                                    }
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetAllServicesResponse"
+                                }
+                            }
+                        },
+                        "description": "OK."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                            }
+                        },
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An authentication error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "You do not have permissions to perform this operation."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                            }
+                        },
+                        "description": "Not found."
+                    },
+                    "405": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Request method 'PUT' not supported."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Method not allowed."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An unexpected server error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error."
+                    },
+                    "501": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Not implemented."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not implemented."
+                    },
+                    "503": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An error occurred while communicating with an external server."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Service unavailable."
+                    },
+                    "504": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "The service is unavailable."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Gateway timeout."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": [
+                        ]
+                    }
+                ],
+                "summary": "(Beta) Get a list of event broker services",
+                "tags": [
+                    "Event Broker Services"
+                ],
+                "x-api-summary-config": {
+                    "x-solace-release-stage": "BETA"
+                }
+            },
+            "post": {
+                "description": "To create an event broker service, you require a datacenter, service class, and name.",
+                "operationId": "createService",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateServiceRequest"
+                            }
+                        }
+                    },
+                    "description": "The new service specification.",
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OperationResponse"
+                                }
+                            }
+                        },
+                        "description": "Accepted."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An entity of type service was passed in an invalid format.",
+                                    "validationDetails": {
+                                        "serviceClassId": [
+                                            "must not be blank"
+                                        ]
+                                    }
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An authentication error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "You do not have permissions to perform this operation."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                            }
+                        },
+                        "description": "Not found."
+                    },
+                    "405": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Request method 'PUT' not supported."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Method not allowed."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An unexpected server error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error."
+                    },
+                    "501": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Not implemented."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not implemented."
+                    },
+                    "503": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An error occurred while communicating with an external server."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Service unavailable."
+                    },
+                    "504": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "The service is unavailable."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Gateway timeout."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": [
+                        ]
+                    }
+                ],
+                "summary": "(Beta) Create an event broker service",
+                "tags": [
+                    "Event Broker Services"
+                ],
+                "x-api-summary-config": {
+                    "x-solace-release-stage": "BETA"
+                }
+            }
+        },
+        "/api/v2/missionControl/eventBrokerServices/{id}": {
+            "delete": {
+                "description": "Delete a service using its unique identifier.",
+                "operationId": "deleteService",
+                "parameters": [
+                    {
+                        "description": "The unique identifier of the service.",
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OperationResponse"
+                                }
+                            }
+                        },
+                        "description": "Operation accepted."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                            }
+                        },
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An authentication error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "You do not have permissions to perform this operation."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Could not find the event broker service with id 4o5kyf4x5504."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not found."
+                    },
+                    "405": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Request method 'PUT' not supported."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Method not allowed."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An unexpected server error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error."
+                    },
+                    "501": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Not implemented."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not implemented."
+                    },
+                    "503": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An error occurred while communicating with an external server."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Service unavailable."
+                    },
+                    "504": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "The service is unavailable."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Gateway timeout."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": [
+                        ]
+                    }
+                ],
+                "summary": "(Beta) Delete an event broker service",
+                "tags": [
+                    "Event Broker Services"
+                ],
+                "x-api-summary-config": {
+                    "x-solace-release-stage": "BETA"
+                }
+            },
+            "get": {
+                "description": "Get the details of an event broker service using its identifier. Optional information an be requested using the expand operator.",
+                "operationId": "getService",
+                "parameters": [
+                    {
+                        "description": "The unique identifier of the service.",
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Additional information to retrieve for event broker service, such as connection endpoint information or broker details.",
+                        "in": "query",
+                        "name": "expand",
+                        "required": false,
+                        "schema": {
+                            "items": {
+                                "enum": [
+                                    "broker",
+                                    "serviceConnectionEndpoints"
+                                ],
+                                "type": "string"
+                            },
+                            "maxItems": 2,
+                            "minItems": 0,
+                            "type": "array",
+                            "uniqueItems": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "data": {
+                                        "adminState": "start",
+                                        "broker": {
+                                            "cluster": {
+                                                "name": "cluster-gke-gcp-us-central1-a-hhi2d6glthe",
+                                                "password": "mnj0hi5t2ljv4",
+                                                "primaryRouterName": "developerservicedevhhi2d6glthesolaceprimary0",
+                                                "remoteAddress": "mr-connection-kys7hiopi9t.messaging.net",
+                                                "supportedAuthenticationMode": [
+                                                    "Basic"
+                                                ]
+                                            },
+                                            "configSyncSslEnabled": false,
+                                            "diskSize": 20,
+                                            "managementReadOnlyLoginCredential": {
+                                                "password": "ciqs9h2hpuelk68aq",
+                                                "token": "YWJj.eyJhY2Nlc3NfdG9rZW4iOiAiZ2Jyb21maWVsZC1kZXY",
+                                                "username": "My-First-Service-view"
+                                            },
+                                            "maxSpoolUsage": 10,
+                                            "monitoringMode": "basic",
+                                            "msgVpns": [
+                                                {
+                                                    "authenticationBasicEnabled": true,
+                                                    "authenticationBasicType": "INTERNAL",
+                                                    "authenticationClientCertEnabled": false,
+                                                    "authenticationClientCertValidateDateEnabled": false,
+                                                    "clientProfiles": [
+                                                        {
+                                                            "name": "default"
+                                                        }
+                                                    ],
+                                                    "enabled": true,
+                                                    "eventLargeMsgThreshold": 11,
+                                                    "managementAdminLoginCredential": {
+                                                        "password": "cs9ikq361tsmsmod",
+                                                        "token": "YWJj.eyJhY2Nlc3NfdG9rZW4iOiAiZ2Jyb21maWVsZC1kZXYtM",
+                                                        "username": "My-First-Service-admin"
+                                                    },
+                                                    "maxConnectionCount": 100,
+                                                    "maxEgressFlowCount": 100,
+                                                    "maxEndpointCount": 100,
+                                                    "maxIngressFlowCount": 100,
+                                                    "maxMsgSpoolUsage": 10000,
+                                                    "maxSubscriptionCount": 1000,
+                                                    "maxTransactedSessionCount": 100,
+                                                    "maxTransactionCount": 500,
+                                                    "msgVpnName": "My-First-Service",
+                                                    "sempOverMessageBus": {
+                                                        "sempAccessToAdminCmdsEnabled": false,
+                                                        "sempAccessToCacheCmdsEnabled": false,
+                                                        "sempAccessToClientAdminCmdsEnabled": false,
+                                                        "sempAccessToShowCmdsEnabled": false,
+                                                        "sempOverMsgBusEnabled": false
+                                                    },
+                                                    "serviceLoginCredential": {
+                                                        "password": "g3ido8ck02u5n6n2",
+                                                        "username": "solace-cloud-client"
+                                                    },
+                                                    "subDomainName": "mr-connection-kys7hiopi9t.messaging.net",
+                                                    "truststoreUri": "https://"
+                                                }
+                                            ],
+                                            "redundancyGroupSslEnabled": false,
+                                            "servicePackageId": "DS-V21.2",
+                                            "tlsStandardDomainCertificateAuthoritiesEnabled": true,
+                                            "version": "10.0.1.62",
+                                            "versionFamily": "10.0"
+                                        },
+                                        "createdTime": "2023-01-09T19:03:45.000Z",
+                                        "creationState": "completed",
+                                        "datacenterId": "gke-gcp-us-central1-a",
+                                        "id": "4o5kyf4x550",
+                                        "infrastructureId": "hhi2d6glthe",
+                                        "locked": false,
+                                        "name": "My-First-Service",
+                                        "ownedBy": "zp30k96zr63",
+                                        "serviceClassId": "developer",
+                                        "serviceConnectionEndpoints": [
+                                            {
+                                                "accessType": "public",
+                                                "description": "A service connection endpoint.",
+                                                "hostNames": [
+                                                    "mr-connection-kys7hiopi9t.messaging.net"
+                                                ],
+                                                "id": "kys7hiopi9t",
+                                                "k8sServiceId": "developer-service-dev-kys7hiopi9t-solace",
+                                                "k8sServiceType": "LoadBalancer",
+                                                "name": "Public Endpoint",
+                                                "ports": {
+                                                    "managementSshTlsListenPort": 0,
+                                                    "serviceAmqpPlainTextListenPort": 0,
+                                                    "serviceAmqpTlsListenPort": 5671,
+                                                    "serviceManagementTlsListenPort": 943,
+                                                    "serviceMqttPlainTextListenPort": 0,
+                                                    "serviceMqttTlsListenPort": 8883,
+                                                    "serviceMqttTlsWebSocketListenPort": 8443,
+                                                    "serviceMqttWebSocketListenPort": 0,
+                                                    "serviceRestIncomingPlainTextListenPort": 0,
+                                                    "serviceRestIncomingTlsListenPort": 9443,
+                                                    "serviceSmfCompressedListenPort": 0,
+                                                    "serviceSmfPlainTextListenPort": 0,
+                                                    "serviceSmfTlsListenPort": 55443,
+                                                    "serviceWebPlainTextListenPort": 0,
+                                                    "serviceWebTlsListenPort": 443
+                                                },
+                                                "type": "serviceConnectionEndpoint"
+                                            }
+                                        ],
+                                        "type": "service"
+                                    }
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetServiceResponse"
+                                }
+                            }
+                        },
+                        "description": "OK."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                            }
+                        },
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An authentication error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "You do not have permissions to perform this operation."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Could not find the event broker service with id 4o5kyf4x5504."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not found."
+                    },
+                    "405": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Request method 'PUT' not supported."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Method not allowed."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An unexpected server error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error."
+                    },
+                    "501": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Not implemented."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not implemented."
+                    },
+                    "503": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An error occurred while communicating with an external server."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Service unavailable."
+                    },
+                    "504": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "The service is unavailable."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Gateway timeout."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": [
+                        ]
+                    }
+                ],
+                "summary": "(Beta) Get an event broker service",
+                "tags": [
+                    "Event Broker Services"
+                ],
+                "x-api-summary-config": {
+                    "x-solace-release-stage": "BETA"
+                }
+            },
+            "patch": {
+                "description": "Update the configuration of an existing event broker service. You can provide any combination of supported fields. If a field is not provided, then it will not be updated.",
+                "operationId": "updateService",
+                "parameters": [
+                    {
+                        "description": "The unique identifier of the event broker service.",
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateServiceRequest"
+                            }
+                        }
+                    },
+                    "description": "The fields to update the configuration for the event broker service.",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetServiceResponse"
+                                }
+                            }
+                        },
+                        "description": "OK."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "A JSON parse error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An authentication error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "You do not have permissions to perform this operation."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Could not find the event broker service with id 4o5kyf4x5504."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not found."
+                    },
+                    "405": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Request method 'PUT' not supported."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Method not allowed."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An unexpected server error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error."
+                    },
+                    "501": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Not implemented."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not implemented."
+                    },
+                    "503": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An error occurred while communicating with an external server."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Service unavailable."
+                    },
+                    "504": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "The service is unavailable."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Gateway timeout."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": [
+                        ]
+                    }
+                ],
+                "summary": "(Beta) Update an event broker service",
+                "tags": [
+                    "Event Broker Services"
+                ],
+                "x-api-summary-config": {
+                    "x-solace-release-stage": "BETA"
+                }
+            }
+        },
+        "/api/v2/missionControl/eventBrokerServices/{serviceId}/operations/{operationId}": {
+            "get": {
+                "description": "Get the status of an operation that being performed on an event broker service. To get the operation, you provide identifier of the operation and the identifier of the event broker service.",
+                "operationId": "getServiceOperation",
+                "parameters": [
+                    {
+                        "description": "The unique identifier of the service.",
+                        "in": "path",
+                        "name": "serviceId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "The identifier of the operation being performed on the event broker service.",
+                        "in": "path",
+                        "name": "operationId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OperationResponse"
+                                }
+                            }
+                        },
+                        "description": "OK."
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                            }
+                        },
+                        "description": "Bad request."
+                    },
+                    "401": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An authentication error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Unauthorized."
+                    },
+                    "403": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "You do not have permissions to perform this operation."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Forbidden."
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Could not find the event broker service with id 4o5kyf4x5504."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not found."
+                    },
+                    "405": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Request method 'PUT' not supported."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Method not allowed."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An unexpected server error occurred."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Internal server error."
+                    },
+                    "501": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "Not implemented."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Not implemented."
+                    },
+                    "503": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "An error occurred while communicating with an external server."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Service unavailable."
+                    },
+                    "504": {
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "errorId": "618e2fb0-a198-4d9d-9219-13e51ef0ecec",
+                                    "message": "The service is unavailable."
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        },
+                        "description": "Gateway timeout."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": [
+                        ]
+                    }
+                ],
+                "summary": "(Beta) Get the status of a service operation",
+                "tags": [
+                    "Event Broker Services"
+                ],
+                "x-api-summary-config": {
+                    "x-solace-release-stage": "BETA"
+                }
+            }
+        }
+    },
+    "security": [
+        {
+            "bearerAuth": [
+            ]
+        }
+    ],
+    "servers": [
+        {
+            "description": "Solace PubSub+ Cloud US EAST Region",
+            "url": "https://api.solace.cloud"
+        },
+        {
+            "description": "Solace PubSub+ Cloud AUS Region",
+            "url": "https://api.solacecloud.com.au"
+        }
+    ],
+    "x-readme": {
+        "explorer-enabled": true,
+        "proxy-enabled": true,
+        "samples-enabled": true
+    }
+}

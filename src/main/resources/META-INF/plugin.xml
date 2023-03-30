@@ -1,0 +1,17 @@
+<idea-plugin>
+    <id>community.solace.mc.idea.plugin</id>
+    <name>Solace PubSub+ Mission Control</name>
+    <vendor>Solace</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Solace Mission Control" secondary="true" anchor="bottom" icon="MyIcons.ToolbarIcon" canCloseContents="true"
+                    factoryClass="community.solace.mc.idea.plugin.SolaceMissionControlToolWindowFactory"/>
+        <applicationConfigurable parentId="tools" instance="community.solace.mc.idea.plugin.settings.AppSettingsConfigurable"
+                                 id="community.solace.mc.idea.plugin.settings.AppSettingsConfigurable"
+                                 displayName="Solace Mission Control"/>
+        <applicationService serviceImplementation="community.solace.mc.idea.plugin.settings.AppSettingsState"/>
+        <notificationGroup id="Solace Mission Control" displayType="BALLOON" key="community.solace.mc.idea.plugin"/>
+    </extensions>
+</idea-plugin>
