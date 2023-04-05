@@ -9,6 +9,7 @@ import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
+import com.intellij.ui.JBSplitter;
 import com.intellij.util.ui.TextTransferable;
 import community.solace.mc.idea.plugin.pubsub.MessagingClient;
 import community.solace.mc.idea.plugin.rest.MissionControlCallback;
@@ -63,7 +64,6 @@ public class ServiceDetailsTab extends SimpleToolWindowPanel {
         // Add buttons to toolbar for connecting, disconnecting, and copying endpoint details
         DefaultActionGroup actionGroup = new DefaultActionGroup();
         actionGroup.add(new ConnectToEndpointAction());
-        actionGroup.add(new DisconnectFromEndpointAction());
         actionGroup.addSeparator();
         actionGroup.add(new CopyEndpointsAction());
 
@@ -89,6 +89,7 @@ public class ServiceDetailsTab extends SimpleToolWindowPanel {
         pub.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         SolaceMessageTable pubTable = new SolaceMessageTable(pubTopic, pubMessage);
+        pubTable.getTable().getEmptyText().setText("Publish");
         pub.add(pubTable, BorderLayout.CENTER);
 
         pubButton.setEnabled(false);
@@ -122,6 +123,7 @@ public class ServiceDetailsTab extends SimpleToolWindowPanel {
         sub.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         SolaceMessageTable subTable = new SolaceMessageTable(pubTopic, pubMessage);
+        subTable.getTable().getEmptyText().setText("Subscribe");
         sub.add(subTable, BorderLayout.CENTER);
 
         final MessageReceiver.MessageHandler handler = (msg) -> ((DefaultTableModel) subTable.getTable().getModel()).addRow(new Object[] {msg.getDestinationName(), msg.getPayloadAsString()});
@@ -151,9 +153,9 @@ public class ServiceDetailsTab extends SimpleToolWindowPanel {
 
         sub.add(subFields, BorderLayout.PAGE_END);
 
-        JPanel pubsub = new JPanel(new GridLayout(1, 2));
-        pubsub.add(pub);
-        pubsub.add(sub);
+        JBSplitter pubsub = new JBSplitter();
+        pubsub.setFirstComponent(pub);
+        pubsub.setSecondComponent(sub);
         add(pubsub, BorderLayout.CENTER);
     }
 
@@ -219,35 +221,35 @@ public class ServiceDetailsTab extends SimpleToolWindowPanel {
 
     private class ConnectToEndpointAction extends AnAction {
         public ConnectToEndpointAction() {
-            super("Connect", "Connect to service", AllIcons.Actions.Execute);
+            super("Connect", "Connect to service", MyIcons.Disconnected);
         }
 
         @Override
         public void actionPerformed(@NotNull AnActionEvent e) {
-            connectToEndpoint((String) endpointList.getSelectedItem());
+            if (isConnectable()) {
+                connectToEndpoint((String) endpointList.getSelectedItem());
+            } else if (isDisconnectable()) {
+                close();
+                setInputStates(false);
+                subscriptionListPanel.clear();
+            }
         }
 
         @Override
         public void update(@NotNull AnActionEvent e) {
-            e.getPresentation().setEnabled(isConnectable());
-        }
-    }
-
-    private class DisconnectFromEndpointAction extends AnAction {
-        public DisconnectFromEndpointAction() {
-            super("Disconnect", "Disconnect from service", AllIcons.Actions.Suspend);
-        }
-
-        @Override
-        public void actionPerformed(@NotNull AnActionEvent e) {
-            close();
-            setInputStates(false);
-            subscriptionListPanel.clear();
-        }
-
-        @Override
-        public void update(@NotNull AnActionEvent e) {
-            e.getPresentation().setEnabled(isDisconnectable());
+            if (isConnectable()) {
+                e.getPresentation().setEnabled(true);
+                e.getPresentation().setIcon(MyIcons.Disconnected);
+                e.getPresentation().setText("Connect");
+                e.getPresentation().setDescription("Connect to the event broker service");
+            } else if (isDisconnectable()) {
+                e.getPresentation().setEnabled(true);
+                e.getPresentation().setIcon(MyIcons.Connected);
+                e.getPresentation().setText("Disconnect");
+                e.getPresentation().setDescription("Disconnect from event broker service");
+            } else {
+                e.getPresentation().setEnabled(false);
+            }
         }
     }
 

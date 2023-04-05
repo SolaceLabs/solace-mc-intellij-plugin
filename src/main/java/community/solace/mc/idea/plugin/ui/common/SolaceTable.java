@@ -18,7 +18,7 @@ import java.util.function.Consumer;
  * - The entire selected row will be passed into the doubleClickHandler as a String array
  */
 public class SolaceTable extends JScrollPane {
-    private final JTable table;
+    private final JBTable table;
     public SolaceTable(TableModel tableModel, JPopupMenu popupMenu, Consumer<String[]> doubleClickHandler) {
         table = new JBTable() {
             @Override
@@ -61,7 +61,7 @@ public class SolaceTable extends JScrollPane {
         return table.getValueAt(table.getSelectedRow(), index).toString();
     }
 
-    public JTable getTable() {
+    public JBTable getTable() {
         return table;
     }
 }
