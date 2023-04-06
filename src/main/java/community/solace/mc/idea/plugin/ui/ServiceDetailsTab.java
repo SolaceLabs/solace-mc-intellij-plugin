@@ -10,6 +10,7 @@ import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.ui.JBSplitter;
+import com.intellij.util.ui.FormBuilder;
 import com.intellij.util.ui.TextTransferable;
 import community.solace.mc.idea.plugin.pubsub.MessagingClient;
 import community.solace.mc.idea.plugin.rest.MissionControlCallback;
@@ -96,10 +97,6 @@ public class ServiceDetailsTab extends SimpleToolWindowPanel {
         pubTopic.setEnabled(false);
         pubMessage.setEnabled(false);
 
-        JPanel topicFieldHolder = new JPanel(new GridLayout(1, 1));
-        topicFieldHolder.setBorder(BorderFactory.createEmptyBorder(11, 0, 0, 0));
-        topicFieldHolder.add(pubTopic);
-
         ActionListener publishMessage = e -> {
             if (publisher != null && publisher.isReady() && !pubTopic.getText().isBlank() && !pubMessage.getText().isBlank()) {
                 publisher.publish(pubMessage.getText(), Topic.of(pubTopic.getText()));
@@ -110,12 +107,15 @@ public class ServiceDetailsTab extends SimpleToolWindowPanel {
         pubMessage.addActionListener(publishMessage);
         pubButton.addActionListener(publishMessage);
 
-        JPanel pubFields = new JPanel(new BorderLayout());
-        pubFields.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        JPanel messageSenderPanel = new JPanel(new BorderLayout());
+        messageSenderPanel.add(pubMessage, BorderLayout.CENTER);
+        messageSenderPanel.add(pubButton, BorderLayout.LINE_END);
 
-        pubFields.add(topicFieldHolder, BorderLayout.PAGE_START);
-        pubFields.add(pubMessage, BorderLayout.CENTER);
-        pubFields.add(pubButton, BorderLayout.LINE_END);
+        JPanel pubFields = FormBuilder.createFormBuilder()
+                .addLabeledComponent("Topic ", pubTopic)
+                .addLabeledComponent("Message ", messageSenderPanel)
+                .getPanel();
+        pubFields.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         pub.add(pubFields, BorderLayout.PAGE_END);
 
@@ -145,12 +145,14 @@ public class ServiceDetailsTab extends SimpleToolWindowPanel {
         subTopic.addActionListener(subscribeToTopic);
         subButton.addActionListener(subscribeToTopic);
 
+        JPanel topicSubscriberPanel = new JPanel(new BorderLayout());
+        topicSubscriberPanel.add(subTopic, BorderLayout.CENTER);
+        topicSubscriberPanel.add(subButton, BorderLayout.LINE_END);
+
         JPanel subFields = new JPanel(new BorderLayout());
         subFields.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         subFields.add(subscriptionListPanel, BorderLayout.PAGE_START);
-        subFields.add(subTopic, BorderLayout.CENTER);
-        subFields.add(subButton, BorderLayout.LINE_END);
-
+        subFields.add(FormBuilder.createFormBuilder().addLabeledComponent("Topic ", topicSubscriberPanel).getPanel(), BorderLayout.CENTER);
         sub.add(subFields, BorderLayout.PAGE_END);
 
         JBSplitter pubsub = new JBSplitter();

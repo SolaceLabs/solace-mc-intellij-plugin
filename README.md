@@ -1,8 +1,6 @@
 # Solace PubSub+ Mission Control Plugin for IntelliJ IDEA
 
 ![Build](https://github.com/SolaceLabs/solace-mc-intellij-plugin/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
 
 <!-- Plugin description -->
 Leverage the power of [Solace's Mission Control](https://solace.com/products/event-broker/cloud/mission-control/) right from IntelliJ.
@@ -23,3 +21,19 @@ Leverage the power of [Solace's Mission Control](https://solace.com/products/eve
   * (Optional) Delete Services
 * Enter the API token in the plugin settings: `Settings/Preferences`>`Tools`>`Solace Mission Control` ![Tool Preferences](doc/tool_settings.png)
 * (Optional) If you use SSO, specify the URL you use to access Solace Cloud
+## Resources
+This is not an officially supported Solace product.
+
+For more information try these resources:
+- Ask the [Solace Community](https://solace.community)
+- The Solace Developer Portal website at: https://solace.dev
+
+
+## Contributing
+Contributions are encouraged! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Authors
+See the list of [contributors](https://github.com/solacecommunity/<github-repo>/graphs/contributors) who participated in this project.
+
+## License
+See the [LICENSE](LICENSE) file for details.

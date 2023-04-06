@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.regex.PatternSyntaxException;
 
+import static community.solace.mc.idea.plugin.rest.RestUtil.SERVICE_CLASSES;
+
 public class ServiceListTab extends SimpleToolWindowPanel {
     private final EventBrokerServicesApi api;
     DefaultTableModel serviceTableModel = new DefaultTableModel();
@@ -118,7 +120,7 @@ public class ServiceListTab extends SimpleToolWindowPanel {
         AnAction createButton = new AnAction("Create", "Create a new service", AllIcons.General.Add) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                int result = JOptionPane.showConfirmDialog(e.getInputEvent().getComponent(), serviceCreationDialog, "Create Service", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                int result = JOptionPane.showConfirmDialog(e.getInputEvent().getComponent(), serviceCreationDialog.getDialogPanel(), "Create Service", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
                 if (result == JOptionPane.OK_OPTION) {
                     if (serviceCreationDialog.createService()) {
@@ -154,7 +156,8 @@ public class ServiceListTab extends SimpleToolWindowPanel {
         public void onSuccess(GetAllServicesResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
             for (GetServices service : result.getData()) {
                 String[] datacenterInfo = deriveCloudAndRegionFromDatacenterId(service.getDatacenterId());
-                serviceTableModel.addRow(new Object[] {service.getId(), service.getName(), service.getServiceClassId(), datacenterInfo[0], datacenterInfo[1]});
+
+                serviceTableModel.addRow(new Object[] {service.getId(), service.getName(), SERVICE_CLASSES.get(service.getServiceClassId()), datacenterInfo[0], datacenterInfo[1]});
             }
 
             Map<String, Object> pagination = (Map<String, Object>) result.getMeta().get("pagination");
@@ -168,11 +171,32 @@ public class ServiceListTab extends SimpleToolWindowPanel {
     }
 
     private String[] deriveCloudAndRegionFromDatacenterId(String datacenterId) {
+        String[] cloudAndRegion;
+
         if (datacenterId.startsWith("gke-gcp")) {
-            return new String[]{"gke-gcp", datacenterId.split("gke-gcp-")[1]};
+            cloudAndRegion = new String[]{"gke-gcp", datacenterId.split("gke-gcp-")[1]};
         } else {
-            return datacenterId.split("-", 2);
+            cloudAndRegion = datacenterId.split("-", 2);
         }
+
+        switch (cloudAndRegion[0]) {
+            case "gke-gcp":
+                cloudAndRegion[0] = "GCP";
+                break;
+            case "eks":
+                cloudAndRegion[0] = "AWS (EKS)";
+                break;
+            case "aws":
+                cloudAndRegion[0] = "AWS";
+                break;
+            case "aks":
+                cloudAndRegion[0] = "Azure";
+                break;
+            default:
+                break;
+        }
+
+        return cloudAndRegion;
     }
 
     private interface SimpleDocumentListener extends DocumentListener {
