@@ -82,7 +82,7 @@ public class ServiceCreationDialog {
             CreateServiceRequest request = new CreateServiceRequest();
             request.setName(name);
             request.setDatacenterId(datacenterId);
-            request.setServiceClassId(classId);
+            request.setServiceClassId(CreateServiceRequest.ServiceClassIdEnum.fromValue(classId));
             api.createService(request);
             return null;
         } catch (ApiException e) {

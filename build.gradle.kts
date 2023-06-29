@@ -1,5 +1,6 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 fun properties(key: String) = providers.gradleProperty(key)
 fun environment(key: String) = providers.environmentVariable(key)
@@ -8,7 +9,7 @@ plugins {
     // Java support
     id("java")
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.13.2"
+    id("org.jetbrains.intellij") version "1.14.1"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "2.0.0"
     // Gradle Qodana Plugin
@@ -141,6 +142,15 @@ tasks {
     }
 }
 
+tasks.register<GenerateTask>("semp") {
+    generatorName.set("java")
+    inputSpec.set("$rootDir/specs/semp-v2-swagger-config.json")
+    outputDir.set("$buildDir/generated")
+    apiPackage.set("com.solace.semp.api")
+    invokerPackage.set("com.solace.semp.invoker")
+    modelPackage.set("com.solace.semp.model")
+}
+
 tasks.compileJava {
-    dependsOn(tasks.openApiGenerate)
+    dependsOn(tasks.openApiGenerate, "semp")
 }

@@ -1,11 +1,6 @@
 package community.solace.mc.idea.plugin.ui;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import community.solace.mc.idea.plugin.rest.MissionControlCallback;
 import community.solace.mc.idea.plugin.settings.AppSettingsState;
@@ -14,7 +9,6 @@ import com.solace.mc.api.EventBrokerServicesApi;
 import com.solace.mc.invoker.ApiException;
 import com.solace.mc.model.GetAllServicesResponse;
 import com.solace.mc.model.GetServices;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -36,6 +30,8 @@ import static community.solace.mc.idea.plugin.rest.RestUtil.SERVICE_CLASSES;
 
 public class ServiceListTab extends SimpleToolWindowPanel {
     private final EventBrokerServicesApi api;
+
+    public ServiceCreationDialog serviceCreationDialog;
     DefaultTableModel serviceTableModel = new DefaultTableModel();
 
     public ServiceListTab(EventBrokerServicesApi api, BiConsumer<String, String> serviceDetailAction) {
@@ -99,7 +95,7 @@ public class ServiceListTab extends SimpleToolWindowPanel {
 
         serviceTable.getTable().setRowSorter(sorter);
 
-        ServiceCreationDialog serviceCreationDialog = new ServiceCreationDialog(api);
+        serviceCreationDialog = new ServiceCreationDialog(api);
 
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.add(new JLabel(AllIcons.Actions.Search), BorderLayout.LINE_START);
@@ -108,34 +104,6 @@ public class ServiceListTab extends SimpleToolWindowPanel {
         setLayout(new BorderLayout());
         add(headerPanel, BorderLayout.PAGE_START);
         add(serviceTable, BorderLayout.CENTER);
-
-        DefaultActionGroup actionGroup = new DefaultActionGroup();
-        AnAction refreshButton = new AnAction("Refresh", "Refresh list of services", AllIcons.Actions.Refresh) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                refreshTable();
-            }
-        };
-
-        AnAction createButton = new AnAction("Create", "Create a new service", AllIcons.General.Add) {
-            @Override
-            public void actionPerformed(@NotNull AnActionEvent e) {
-                int result = JOptionPane.showConfirmDialog(e.getInputEvent().getComponent(), serviceCreationDialog.getDialogPanel(), "Create Service", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-                if (result == JOptionPane.OK_OPTION) {
-                    if (serviceCreationDialog.createService()) {
-                        refreshTable();
-                    }
-                }
-            }
-        };
-
-        actionGroup.add(refreshButton);
-        actionGroup.add(createButton);
-
-        ActionToolbar actionToolbar = ActionManager.getInstance().createActionToolbar("mc-toolbar", actionGroup, false);
-        actionToolbar.setTargetComponent(this);
-        setToolbar(actionToolbar.getComponent());
     }
 
     public void refreshTable() {
@@ -157,7 +125,7 @@ public class ServiceListTab extends SimpleToolWindowPanel {
             for (GetServices service : result.getData()) {
                 String[] datacenterInfo = deriveCloudAndRegionFromDatacenterId(service.getDatacenterId());
 
-                serviceTableModel.addRow(new Object[] {service.getId(), service.getName(), SERVICE_CLASSES.get(service.getServiceClassId()), datacenterInfo[0], datacenterInfo[1]});
+                serviceTableModel.addRow(new Object[] {service.getId(), service.getName(), SERVICE_CLASSES.get(service.getServiceClassId().getValue()), datacenterInfo[0], datacenterInfo[1]});
             }
 
             Map<String, Object> pagination = (Map<String, Object>) result.getMeta().get("pagination");

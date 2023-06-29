@@ -14,7 +14,6 @@ import java.util.function.Consumer;
 
 /**
  * An extension of the SolaceTable for the "Try Me" functionality in the service details page.
- * Both publish and subscribe functionality of "Try Me" support the same actions:
  * - Display the topic and message of the sent/received message
  * - Allow copying of the topic or message from the table
  * - Pre-populate the publish fields with a topic and message from the table
@@ -23,6 +22,8 @@ import java.util.function.Consumer;
 public class SolaceMessageTable extends SolaceTable {
     private SolaceMessageTable(DefaultTableModel messageTableModel, JPopupMenu messagePopUpMenu, Consumer<String[]> doubleClickHandler, JTextField pubTopicField, JTextField pubMsgField) {
         super(messageTableModel, messagePopUpMenu, doubleClickHandler);
+
+        getTable().getEmptyText().setText("Received messages");
 
         messageTableModel.setColumnIdentifiers(new Object[] {"Topic", "Message"});
 
