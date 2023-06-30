@@ -16,11 +16,11 @@ import static community.solace.mc.idea.plugin.rest.RestUtil.DATACENTERS;
 import static community.solace.mc.idea.plugin.rest.RestUtil.REVERSE_SERVICE_CLASSES;
 
 public class ServiceCreationDialog {
-    JPanel dialogPanel;
-    JTextField serviceNameField = new JTextField();
-    ButtonGroup providerSelection = new ButtonGroup();
-    ComboBox<Datacenter> regionComboBox = new ComboBox<>(250);
-    ComboBox<String> serviceClassId = new ComboBox<>(250);
+    private final JPanel dialogPanel;
+    private final JTextField serviceNameField = new JTextField();
+    private final ButtonGroup providerSelection = new ButtonGroup();
+    private final ComboBox<Datacenter> regionComboBox = new ComboBox<>(250);
+    private final ComboBox<String> serviceClassId = new ComboBox<>(250);
 
     private final EventBrokerServicesApi api;
 

@@ -9,15 +9,11 @@ import com.solace.mc.invoker.ApiClient;
 import javax.swing.*;
 
 public class SolaceMissionControlToolWindow {
-  ApiClient apiClient;
-  EventBrokerServicesApi api;
-  Project project;
-  ParentPanel parentPanel;
+  private final ParentPanel parentPanel;
 
   public SolaceMissionControlToolWindow(Project project) {
-    this.project = project;
-    apiClient = new ApiClient();
-    api = new EventBrokerServicesApi(apiClient);
+    ApiClient apiClient = new ApiClient();
+    EventBrokerServicesApi api = new EventBrokerServicesApi(apiClient);
     AppSettingsState.getInstance().setApi(api);
 
     parentPanel = new ParentPanel(project, api);

@@ -16,7 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TryMeControlPanel extends JPanel {
-    TryMePanel tryMePanel;
+    private final TryMePanel tryMePanel;
 
     public TryMeControlPanel(TryMePanel tryMePanel) {
         setLayout(new BorderLayout());

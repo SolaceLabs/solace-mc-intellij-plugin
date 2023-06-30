@@ -13,11 +13,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ServicesControlPanel extends JPanel {
-    ServiceListTab serviceListTab;
-
     public ServicesControlPanel(ServiceListTab serviceListTab) {
         setLayout(new BorderLayout());
-        this.serviceListTab = serviceListTab;
 
         DefaultActionGroup actionGroup = new DefaultActionGroup();
 

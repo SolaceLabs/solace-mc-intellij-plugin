@@ -7,9 +7,9 @@ import com.intellij.util.ui.FormBuilder;
 import javax.swing.*;
 
 public class AppSettingsPanel {
-    JPanel settingsPanel;
-    JBTextField baseUrlField = new JBTextField("console.solace.cloud");
-    JBPasswordField apiTokenField = new JBPasswordField();
+    private final JPanel settingsPanel;
+    private final JBTextField baseUrlField = new JBTextField("console.solace.cloud");
+    private final JBPasswordField apiTokenField = new JBPasswordField();
     public AppSettingsPanel() {
         settingsPanel = FormBuilder.createFormBuilder()
                 .addLabeledComponent(new JLabel("Base URL"), baseUrlField)

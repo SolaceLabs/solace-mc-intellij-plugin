@@ -7,9 +7,6 @@ import com.solace.messaging.config.profile.ConfigurationProfile;
 import java.util.Properties;
 
 public class MessagingClient {
-    public static void main(String[] args) {
-    }
-
     public static MessagingService messagingService(String host, String vpnName, String username, String password) {
         final Properties properties = new Properties();
         properties.setProperty(SolaceProperties.TransportLayerProperties.HOST, "tcps://" + host);

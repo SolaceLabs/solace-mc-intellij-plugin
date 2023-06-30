@@ -33,7 +33,7 @@ public class InfoTab extends ServiceDetailsTab {
         actionGroup.add(new CopyEndpointsAction(vpnName, username, password, endpoints));
     }
 
-    private class CopyEndpointsAction extends AnAction {
+    private static class CopyEndpointsAction extends AnAction {
         private final JPopupMenu endpointMenu = new JPopupMenu();
 
         public CopyEndpointsAction(String vpnName, String username, String password, List<String> endpoints) {

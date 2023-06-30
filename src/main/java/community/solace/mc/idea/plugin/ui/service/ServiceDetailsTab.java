@@ -9,7 +9,7 @@ import java.awt.*;
 
 // Generic tab for service details with a toolbar on top. Directly add AnActions to the actionGroup
 public class ServiceDetailsTab extends JPanel {
-    DefaultActionGroup actionGroup = new DefaultActionGroup();
+    final DefaultActionGroup actionGroup = new DefaultActionGroup();
 
     public ServiceDetailsTab() {
         setLayout(new BorderLayout());

@@ -31,8 +31,8 @@ import static community.solace.mc.idea.plugin.rest.RestUtil.SERVICE_CLASSES;
 public class ServiceListTab extends SimpleToolWindowPanel {
     private final EventBrokerServicesApi api;
 
-    public ServiceCreationDialog serviceCreationDialog;
-    DefaultTableModel serviceTableModel = new DefaultTableModel();
+    public final ServiceCreationDialog serviceCreationDialog;
+    private final DefaultTableModel serviceTableModel = new DefaultTableModel();
 
     public ServiceListTab(EventBrokerServicesApi api, BiConsumer<String, String> serviceDetailAction) {
         super(false, true);
@@ -122,18 +122,24 @@ public class ServiceListTab extends SimpleToolWindowPanel {
     private class GetServicesCallback implements MissionControlCallback<GetAllServicesResponse> {
         @Override
         public void onSuccess(GetAllServicesResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
-            for (GetServices service : result.getData()) {
-                String[] datacenterInfo = deriveCloudAndRegionFromDatacenterId(service.getDatacenterId());
+            if (result != null && result.getData() != null) {
+                for (GetServices service : result.getData()) {
+                    if (service.getDatacenterId() != null && service.getServiceClassId() != null) {
+                        String[] datacenterInfo = deriveCloudAndRegionFromDatacenterId(service.getDatacenterId());
 
-                serviceTableModel.addRow(new Object[] {service.getId(), service.getName(), SERVICE_CLASSES.get(service.getServiceClassId().getValue()), datacenterInfo[0], datacenterInfo[1]});
-            }
+                        serviceTableModel.addRow(new Object[]{service.getId(), service.getName(), SERVICE_CLASSES.get(service.getServiceClassId().getValue()), datacenterInfo[0], datacenterInfo[1]});
+                    }
+                }
 
-            Map<String, Object> pagination = (Map<String, Object>) result.getMeta().get("pagination");
-            Object nextPageResult = pagination.get("nextPage");
+                if (result.getMeta() != null) {
+                    Map<String, Object> pagination = (Map<String, Object>) result.getMeta().get("pagination");
+                    Object nextPageResult = pagination.get("nextPage");
 
-            if (nextPageResult != null) {
-                int nextPage = (int) Double.parseDouble(nextPageResult.toString());
-                getServices(nextPage);
+                    if (nextPageResult != null) {
+                        int nextPage = (int) Double.parseDouble(nextPageResult.toString());
+                        getServices(nextPage);
+                    }
+                }
             }
         }
     }

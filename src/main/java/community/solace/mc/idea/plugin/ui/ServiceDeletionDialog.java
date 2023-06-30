@@ -7,8 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ServiceDeletionDialog extends Panel {
-    JTextField serviceNameField = new JTextField();
-
+    private final JTextField serviceNameField = new JTextField();
     private final EventBrokerServicesApi api;
     private final String serviceId;
     private final String serviceName;

@@ -19,9 +19,9 @@ import java.util.Set;
 public class ServicePanel extends JTabbedPane {
     private static final Set<String> EXPAND = Set.of("broker", "serviceConnectionEndpoints");
 
-    InfoTab infoTab = new InfoTab();
-    QueueTab queueTab = new QueueTab();
-    TryMePanel tryMePanel;
+    private final InfoTab infoTab = new InfoTab();
+    private final QueueTab queueTab = new QueueTab();
+    private final TryMePanel tryMePanel;
 
     public ServicePanel(EventBrokerServicesApi api, String id, TryMePanel tryMePanel) {
         this.tryMePanel = tryMePanel;

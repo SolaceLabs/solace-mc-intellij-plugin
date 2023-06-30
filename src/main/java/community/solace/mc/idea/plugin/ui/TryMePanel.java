@@ -20,9 +20,9 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class TryMePanel extends JPanel {
-    IconButton pubButton = new IconButton(MyIcons.Pub, "Publish");
-    JTextField pubTopic = new JTextField();
-    JTextField pubMessage = new JTextField();
+    private final IconButton pubButton = new IconButton(MyIcons.Pub, "Publish");
+    private final JTextField pubTopic = new JTextField();
+    private final JTextField pubMessage = new JTextField();
 
     private String vpnName;
     private String username;
@@ -75,12 +75,14 @@ public class TryMePanel extends JPanel {
     }
 
     public void connectToEndpoint() {
-        // In case already connected to another endpoint, tear it down
-        disconnectFromEndpoint();
+        if (connectionEndpointsComboBox.getSelectedItem() != null) {
+            // In case already connected to another endpoint, tear it down
+            disconnectFromEndpoint();
 
-        messagingService = MessagingClient.messagingService(connectionEndpointsComboBox.getSelectedItem().toString(), vpnName, username, password);
-        publisher = messagingService.createDirectMessagePublisherBuilder().build().start();
-        setInputStates(true);
+            messagingService = MessagingClient.messagingService(connectionEndpointsComboBox.getSelectedItem().toString(), vpnName, username, password);
+            publisher = messagingService.createDirectMessagePublisherBuilder().build().start();
+            setInputStates(true);
+        }
     }
 
     public void disconnectFromEndpoint() {
@@ -143,15 +145,13 @@ public class TryMePanel extends JPanel {
         messageSenderPanel.add(pubMessage, BorderLayout.CENTER);
         messageSenderPanel.add(pubButton, BorderLayout.LINE_END);
 
-        JPanel pubFields = FormBuilder.createFormBuilder()
+        return FormBuilder.createFormBuilder()
                 .addSeparator()
                 .addSeparator()
                 .addComponent(new JLabel("Publish"))
                 .addLabeledComponent("Topic ", pubTopic)
                 .addLabeledComponent("Message ", messageSenderPanel)
                 .getPanel();
-
-        return pubFields;
     }
 
     public void subscribeToTopic(String topic) {

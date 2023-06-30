@@ -8,3 +8,19 @@ exclude:
   - name: All
     paths:
       - .qodana
+  - name: SuspiciousNameCombination
+    paths:
+      # Switching widths and heights is intentional for rotating the label
+      - src/main/java/community/solace/mc/idea/plugin/ui/common/RotatedLabel.java
+  - name: DataFlowIssue
+    paths:
+      # Allowing NPEs to flow through for easier debugging and bloated code
+      - src/main/java/community/solace/mc/idea/plugin/ui/ServicePanel.java
+  - name: UnstableApiUsage
+    paths:
+      # @NlsContexts is experimental but just following IntelliJ docs
+      - src/main/java/community/solace/mc/idea/plugin/settings/AppSettingsConfigurable.java
+  - name: DialogTitleCapitalization
+    paths:
+      # Solace Mission Control is a proper noun
+      - src/main/java/community/solace/mc/idea/plugin/rest/MissionControlCallback.java
