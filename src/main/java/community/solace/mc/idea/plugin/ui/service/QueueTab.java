@@ -118,73 +118,77 @@ public class QueueTab extends ServiceDetailsTab {
         SolaceTable queueListTable = new SolaceTable(queueListTableModel, queueOptions, (s) -> {
             try {
                 MsgVpnQueue queue = queueApi.getMsgVpnQueue(vpnName, s[0], null, null).getData();
-                Map<String, Object> result = GSON.fromJson(queue.toJson(), Map.class);
 
-                DefaultTableModel queueTableModel = new DefaultTableModel() {
-                    @Override
-                    public boolean isCellEditable(int row, int column) {
-                        // Attribute names are in col 0
-                        return column != 0;
-                    }
-                };
+                if (queue != null) {
+                    Map<String, Object> result = GSON.fromJson(queue.toJson(), Map.class);
 
-                queueTableModel.setColumnIdentifiers(new Object[]{"Attribute", "Value"});
+                    DefaultTableModel queueTableModel = new DefaultTableModel() {
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                            // Attribute names are in col 0
+                            return column != 0;
+                        }
+                    };
 
-                List<VALUE_TYPE> valueTypes = new ArrayList<>();
+                    queueTableModel.setColumnIdentifiers(new Object[]{"Attribute", "Value"});
+                    List<VALUE_TYPE> valueTypes = new ArrayList<>();
 
-                queueTableModel.addTableModelListener(e -> {
-                    if (e.getType() == TableModelEvent.UPDATE) {
-                        Object changed = ((TableModel) e.getSource()).getValueAt(e.getFirstRow(), 1);
+                    queueTableModel.addTableModelListener(e -> {
+                        if (e.getType() == TableModelEvent.UPDATE) {
+                            Object changed = ((TableModel) e.getSource()).getValueAt(e.getFirstRow(), 1);
 
-                        // After parsing an updated value, it fires another event, so only consider this for non-String values
-                        if (changed instanceof String) {
-                            switch (valueTypes.get(e.getFirstRow())) {
-                                case DOUBLE:
-                                    queueTableModel.setValueAt(Double.parseDouble(changed.toString()), e.getFirstRow(), 1);
-                                    break;
-                                case BOOL:
-                                    queueTableModel.setValueAt(Boolean.parseBoolean(changed.toString()), e.getFirstRow(), 1);
-                                    break;
+                            // After parsing an updated value, it fires another event, so only consider this for non-String values
+                            if (changed instanceof String) {
+                                switch (valueTypes.get(e.getFirstRow())) {
+                                    case DOUBLE:
+                                        queueTableModel.setValueAt(Double.parseDouble(changed.toString()), e.getFirstRow(), 1);
+                                        break;
+                                    case BOOL:
+                                        queueTableModel.setValueAt(Boolean.parseBoolean(changed.toString()), e.getFirstRow(), 1);
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-                // Go through all the attributes of a queue and store their types
-                for (Map.Entry<String, Object> e : result.entrySet()) {
-                    if (e.getValue() instanceof Double) {
-                        queueTableModel.addRow(new Object[]{e.getKey(), e.getValue()});
-                        valueTypes.add(VALUE_TYPE.DOUBLE);
-                    } else if (e.getValue() instanceof Boolean) {
-                        queueTableModel.addRow(new Object[]{e.getKey(), e.getValue()});
-                        valueTypes.add(VALUE_TYPE.BOOL);
-                    } else if (e.getValue() instanceof String) {
-                        queueTableModel.addRow(new Object[]{e.getKey(), e.getValue()});
-                        valueTypes.add(VALUE_TYPE.STRING);
-                    }
-                }
-
-                JBTable queueTable = new JBTable(queueTableModel);
-                JPanel queueTablePanel = new JPanel();
-                queueTablePanel.setLayout(new BorderLayout());
-                queueTablePanel.add(new JScrollPane(queueTable), BorderLayout.CENTER);
-
-                QueueDetailsDialog dialog = new QueueDetailsDialog(queue.getQueueName(), new JScrollPane(queueTablePanel));
-
-                if (dialog.showAndGet()) {
-                    Map<String, Object> updatedValues = new HashMap<>();
-
-                    for (int i = 0; i < queueTableModel.getRowCount(); i++) {
-                        String k = queueTableModel.getValueAt(i, 0).toString();
-                        Object v = queueTableModel.getValueAt(i, 1);
-                        updatedValues.put(k, v);
+                    // Go through all the attributes of a queue and store their types
+                    for (Map.Entry<String, Object> e : result.entrySet()) {
+                        if (e.getValue() instanceof Double) {
+                            queueTableModel.addRow(new Object[]{e.getKey(), e.getValue()});
+                            valueTypes.add(VALUE_TYPE.DOUBLE);
+                        } else if (e.getValue() instanceof Boolean) {
+                            queueTableModel.addRow(new Object[]{e.getKey(), e.getValue()});
+                            valueTypes.add(VALUE_TYPE.BOOL);
+                        } else if (e.getValue() instanceof String) {
+                            queueTableModel.addRow(new Object[]{e.getKey(), e.getValue()});
+                            valueTypes.add(VALUE_TYPE.STRING);
+                        }
                     }
 
-                    try {
-                        queueApi.replaceMsgVpnQueue(vpnName, queue.getQueueName(), MsgVpnQueue.fromJson(GSON.toJson(updatedValues)), null, null);
-                        refreshQueues();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                    JBTable queueTable = new JBTable(queueTableModel);
+                    JPanel queueTablePanel = new JPanel();
+                    queueTablePanel.setLayout(new BorderLayout());
+                    queueTablePanel.add(new JScrollPane(queueTable), BorderLayout.CENTER);
+
+                    QueueDetailsDialog dialog = new QueueDetailsDialog(queue.getQueueName(), new JScrollPane(queueTablePanel));
+
+                    if (dialog.showAndGet()) {
+                        Map<String, Object> updatedValues = new HashMap<>();
+
+                        for (int i = 0; i < queueTableModel.getRowCount(); i++) {
+                            String k = queueTableModel.getValueAt(i, 0).toString();
+                            Object v = queueTableModel.getValueAt(i, 1);
+                            updatedValues.put(k, v);
+                        }
+
+                        try {
+                            queueApi.replaceMsgVpnQueue(vpnName, queue.getQueueName(), MsgVpnQueue.fromJson(GSON.toJson(updatedValues)), null, null);
+                            refreshQueues();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
             } catch (com.solace.semp.invoker.ApiException e) {
@@ -228,17 +232,19 @@ public class QueueTab extends ServiceDetailsTab {
 
         @Override
         public void onSuccess(MsgVpnQueuesResponse result, int statusCode, Map<String, List<String>> responseHeaders) {
-            for (MsgVpnQueue q : result.getData()) {
-                queueListTableModel.addRow(new Object[]{q.getQueueName(), q.getAccessType(), q.getMaxMsgSpoolUsage()});
-            }
+            if (result != null && result.getData() != null) {
+                for (MsgVpnQueue q : result.getData()) {
+                    queueListTableModel.addRow(new Object[]{q.getQueueName(), q.getAccessType(), q.getMaxMsgSpoolUsage()});
+                }
 
-            if (result.getMeta().getPaging() != null) {
-                String cursor = result.getMeta().getPaging().getCursorQuery();
+                if (result.getMeta().getPaging() != null) {
+                    String cursor = result.getMeta().getPaging().getCursorQuery();
 
-                try {
-                    queueApi.getMsgVpnQueuesAsync(vpnName, null, cursor, null, null, null, new GetQueuesCallback());
-                } catch (ApiException e) {
-                    throw new RuntimeException(e);
+                    try {
+                        queueApi.getMsgVpnQueuesAsync(vpnName, null, cursor, null, null, null, new GetQueuesCallback());
+                    } catch (ApiException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
