@@ -6,8 +6,7 @@ import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.ui.popup.JBPopup;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
+import community.solace.mc.idea.plugin.ui.common.PopupTextInput;
 import community.solace.mc.idea.plugin.ui.common.RotatedLabel;
 import icons.MyIcons;
 import org.jetbrains.annotations.NotNull;
@@ -44,19 +43,7 @@ public class TryMeControlPanel extends JPanel {
         AnAction subscribeButton = new AnAction("Subscribe", "Subscribe to a topic", AllIcons.General.Add) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                JTextField subscriptionInput = new JTextField("", 18);
-
-                JBPopup subPopup = JBPopupFactory.getInstance().createComponentPopupBuilder(subscriptionInput, null)
-//                        .setTitle("Subscribe")
-                        .setAdText("Subscribe to topic")
-                        .setRequestFocus(true)
-                        .setCancelOnClickOutside(true)
-                        .setCancelOnOtherWindowOpen(false)
-                        .setOkHandler(() -> tryMePanel.subscribeToTopic(subscriptionInput.getText()))
-                        .createPopup();
-
-                subscriptionInput.addActionListener(l -> subPopup.closeOk(null));
-                subPopup.showUnderneathOf(e.getInputEvent().getComponent());
+                PopupTextInput.show("Subscribe to topic", tryMePanel::subscribeToTopic, e.getInputEvent().getComponent());
             }
 
             @Override

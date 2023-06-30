@@ -146,15 +146,25 @@ tasks {
     }
 }
 
-tasks.register<GenerateTask>("semp") {
+tasks.register<GenerateTask>("sempConfig") {
     generatorName.set("java")
     inputSpec.set("$rootDir/specs/semp-v2-swagger-config.json")
     outputDir.set("$buildDir/generated")
-    apiPackage.set("com.solace.semp.api")
-    invokerPackage.set("com.solace.semp.invoker")
-    modelPackage.set("com.solace.semp.model")
+    apiPackage.set("com.solace.semp.config.api")
+    invokerPackage.set("com.solace.semp.config.invoker")
+    modelPackage.set("com.solace.semp.config.model")
+}
+
+tasks.register<GenerateTask>("sempMonitor") {
+    generatorName.set("java")
+    inputSpec.set("$rootDir/specs/semp-v2-swagger-monitor.json")
+    outputDir.set("$buildDir/generated")
+    apiPackage.set("com.solace.semp.monitor.api")
+    invokerPackage.set("com.solace.semp.monitor.invoker")
+    modelPackage.set("com.solace.semp.monitor.model")
 }
 
 tasks.compileJava {
-    dependsOn(tasks.openApiGenerate, "semp")
+    dependsOn(tasks.openApiGenerate, "sempConfig")
+    dependsOn(tasks.openApiGenerate, "sempMonitor")
 }
