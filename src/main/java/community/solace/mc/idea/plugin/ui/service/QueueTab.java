@@ -28,7 +28,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,10 +108,23 @@ public class QueueTab extends ServiceDetailsTab {
         refreshQueues();
 
         JPopupMenu queueOptions = new JPopupMenu();
+        JMenuItem openInBrowser = new JMenuItem("Open in browser");
         JMenuItem deleteQueue = new JMenuItem("Delete Queue");
+        queueOptions.add(openInBrowser);
         queueOptions.add(deleteQueue);
 
         SolaceTable queueListTable = new SolaceTable(queueListTableModel, queueOptions, (s) -> new QueueDetailsDialog(new QueueDetails(s[0])).show());
+
+        openInBrowser.addActionListener(e -> {
+            try {
+                Desktop.getDesktop().browse(URI.create("https://" + sempHostname + ":" + sempPort +
+                        "/#/msg-vpns/" + Base64.getEncoder().encodeToString(vpnName.getBytes()) +
+                        "/endpoints/queues/" + Base64.getEncoder().encodeToString(queueListTable.getValueForSelectedRow(0).getBytes()) +
+                        "/summary?token=YWJj." + Base64.getEncoder().encodeToString(("{\"access_token\": \"" + sempUsername + ":" + sempPassword + "\"}").getBytes()) + ".eHl6"));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         deleteQueue.addActionListener(e -> {
             String queueName = queueListTable.getValueForSelectedRow(0);
@@ -144,7 +159,7 @@ public class QueueTab extends ServiceDetailsTab {
         public QueueDetailsDialog(QueueDetails queueDetails) {
             super(true); // use current window as parent
             this.queueDetails = queueDetails;
-            setTitle(queueDetails.getQueueName());
+            setTitle("Queue: " + queueDetails.getQueueName());
             init();
         }
 
@@ -286,11 +301,11 @@ public class QueueTab extends ServiceDetailsTab {
             queueSubscriptionMenu.add(deleteQueueSubscription);
 
             SolaceTable queueSubscriptionTable = new SolaceTable(queueSubscriptionsTableModel, queueSubscriptionMenu, s -> {});
-            queueSubscriptionsTableModel.setColumnIdentifiers(new Object[]{"Queue Subscriptions"});
+            queueSubscriptionsTableModel.setColumnIdentifiers(new Object[]{"Topic Subscriptions"});
 
             deleteQueueSubscription.addActionListener(e -> {
                 String subscriptionTopic = queueSubscriptionTable.getValueForSelectedRow(0);
-                int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete queue subscription " + subscriptionTopic + "?", "Delete Queue Subscription", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete topic subscription " + subscriptionTopic + "?", "Delete Queue Subscription", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
                 if (result == JOptionPane.OK_OPTION) {
                     try {
@@ -304,10 +319,10 @@ public class QueueTab extends ServiceDetailsTab {
 
             refreshQueueSubscriptions();
 
-            JButton addQueueSubscription = new JButton("Add Queue Subscription");
+            JButton addQueueSubscription = new JButton("Add Topic Subscription");
 
             addQueueSubscription.addActionListener(e -> {
-                PopupTextInput.show("Add queue subscription", s -> {
+                PopupTextInput.show("Add topic subscription", s -> {
                     try {
                         MsgVpnQueueSubscription body = new MsgVpnQueueSubscription();
                         body.setSubscriptionTopic(s);

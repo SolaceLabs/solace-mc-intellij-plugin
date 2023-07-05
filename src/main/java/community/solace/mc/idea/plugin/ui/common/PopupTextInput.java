@@ -12,7 +12,7 @@ public class PopupTextInput {
         JTextField textInput = new JTextField("", 18);
 
         JBPopup popup = JBPopupFactory.getInstance().createComponentPopupBuilder(textInput, null)
-                .setAdText(title)
+                .setTitle(title)
                 .setRequestFocus(true)
                 .setCancelOnClickOutside(true)
                 .setCancelOnOtherWindowOpen(false)

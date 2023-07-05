@@ -16,7 +16,9 @@ Leverage the power of [Solace's Mission Control](https://solace.com/products/eve
 
 ## Usage
 * Create a [Solace Cloud API token](https://docs.solace.com/Cloud/ght_api_tokens.htm?Highlight=api%20tokens#Create) with the following permissions (either the "My Services" or "Organizational Services" variants):
-  * Get Services
+  * One of:
+    * Get Services with Viewer Credentials (can only read queues)
+    * Get Services with Management Credentials (can edit/create queues)
   * (Optional) Create Services
   * (Optional) Delete Services
 * Enter the API token in the plugin settings: `Settings/Preferences`>`Tools`>`Solace Mission Control` ![Tool Preferences](doc/tool_settings.png)
