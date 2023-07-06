@@ -24,6 +24,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.regex.PatternSyntaxException;
 
 import static community.solace.mc.idea.plugin.rest.RestUtil.SERVICE_CLASSES;
@@ -34,7 +35,7 @@ public class ServiceListTab extends SimpleToolWindowPanel {
     public final ServiceCreationDialog serviceCreationDialog;
     private final DefaultTableModel serviceTableModel = new DefaultTableModel();
 
-    public ServiceListTab(EventBrokerServicesApi api, BiConsumer<String, String> serviceDetailAction) {
+    public ServiceListTab(EventBrokerServicesApi api, BiConsumer<String, String> serviceDetailAction, Consumer<String> deleteAction) {
         super(false, true);
         this.api = api;
 
@@ -68,6 +69,7 @@ public class ServiceListTab extends SimpleToolWindowPanel {
 
             if (result == JOptionPane.OK_OPTION) {
                 if (serviceDeletionDialog.deleteService()) {
+                    deleteAction.accept(serviceTable.getValueForSelectedRow(0));
                     refreshTable();
                 }
             }

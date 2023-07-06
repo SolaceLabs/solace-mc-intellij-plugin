@@ -28,6 +28,15 @@ public class ParentPanel extends JPanel {
             mainPanel.revalidate();
             serviceListTab.setVisible(false);
             tryMePanel.setVisible(true);
+        }, (id) -> {
+            // If the main panel is showing the service that was deleted, tear down connections and show placeholder
+            if (mainPanel.getInnerComponent() instanceof ServicePanel && ((ServicePanel) mainPanel.getInnerComponent()).getServiceId().equals(id)) {
+                mainPanel.setInnerComponent(servicePlaceholderPanel);
+                mainPanel.revalidate();
+                serviceListTab.setVisible(true);
+                tryMePanel.setVisible(false);
+                tryMePanel.destroy();
+            }
         });
         ServicesControlPanel servicesControlPanel = new ServicesControlPanel(serviceListTab);
         serviceListTab.refreshTable();

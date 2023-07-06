@@ -22,8 +22,10 @@ public class ServicePanel extends JTabbedPane {
     private final InfoTab infoTab = new InfoTab();
     private final QueueTab queueTab = new QueueTab();
     private final TryMePanel tryMePanel;
+    private final String id;
 
     public ServicePanel(EventBrokerServicesApi api, String id, TryMePanel tryMePanel) {
+        this.id = id;
         this.tryMePanel = tryMePanel;
 
         try {
@@ -35,6 +37,10 @@ public class ServicePanel extends JTabbedPane {
 
         addTab("Info", infoTab);
         addTab("Queues", queueTab);
+    }
+
+    public String getServiceId() {
+        return id;
     }
 
     private class GetServiceCallback implements MissionControlCallback<GetServiceResponse> {
