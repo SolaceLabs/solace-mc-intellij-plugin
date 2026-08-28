@@ -21,6 +21,11 @@ jobs:
     with:
       setup_actions: '["setup-java"]'
       java_distribution: temurin
+      # FOSSA's gradle init script calls Task.project at execution time, which
+      # this repo's configuration cache forbids -- the analysis fails and uploads
+      # zero dependencies. Disable the cache for the scan only.
+      custom_setup_script: |
+        echo "org.gradle.unsafe.configuration-cache=false" >> gradle.properties
     secrets:
       FOSSA_API_KEY: ${{ secrets.FOSSA_API_KEY }}
 
