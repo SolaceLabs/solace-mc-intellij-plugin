@@ -29,9 +29,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
-    implementation("io.gsonfire:gson-fire:1.8.5")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation("io.gsonfire:gson-fire:1.9.0")
     implementation("javax.ws.rs:javax.ws.rs-api:2.1.1")
     implementation("com.solace:solace-messaging-client:1.1.0")
 }
