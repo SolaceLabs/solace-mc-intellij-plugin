@@ -14,7 +14,7 @@ public class ParentPanel extends JPanel {
 
         setLayout(new BorderLayout());
 
-        ThreeComponentsSplitter mainPanel = new ThreeComponentsSplitter(false, true, project);
+        ThreeComponentsSplitter mainPanel = new ThreeComponentsSplitter(false, true);
         mainPanel.setFirstSize(300);
         mainPanel.setLastSize(300);
 
