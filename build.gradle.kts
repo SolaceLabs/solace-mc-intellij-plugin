@@ -35,6 +35,9 @@ dependencies {
     implementation("javax.ws.rs:javax.ws.rs-api:2.1.1")
     implementation("com.solace:solace-messaging-client:1.1.0")
 }
+configurations.matching { it.name == "KoverEngineConfig" }.configureEach {
+    resolutionStrategy.force("org.json:json:20231013")
+}
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
